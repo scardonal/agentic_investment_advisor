@@ -3,10 +3,17 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from agentic_investment_advisor.models import manager_llm, agent_llm
+from crewai_tools import TavilySearchTool
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+
+tavily_tool = TavilySearchTool(api_key=os.getenv("TAVILY_API_KEY", ""), max_results=5)
 
 
 @CrewBase
@@ -22,6 +29,12 @@ class AgenticInvestmentAdvisor:
 
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
+
+    # ToDo: Add the Tavily tool to the researcher agent
+    # ToDo: Adjust agents and tasks to reflect the new agent roles
+    # ToDo: Add mcp tools to agents as needed
+    # ToDo: Create params yaml file for dynamic task parameters
+
     @agent
     def researcher(self) -> Agent:
         return Agent(

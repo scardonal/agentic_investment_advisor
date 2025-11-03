@@ -10,6 +10,7 @@ dependencies = [
     "opik>=1.8.68",
     "portkey-ai>=2.0.2",
     "python-dotenv>=1.2.1",
+    "tavily-python>=0.7.12",
 ]
 
 [project.scripts]
@@ -31,4 +32,20 @@ type = "crew"
 dev = [
     "ipykernel>=7.1.0",
     "pip>=25.3",
+]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
 ]
