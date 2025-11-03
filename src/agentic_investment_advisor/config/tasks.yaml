@@ -1,17 +1,78 @@
-research_task:
+user_profile_extraction_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
-  expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    Based on the user message, extract and infer the user's
+    financial goals, risk profile, and potential securities of interest 
+    (stocks, bonds, ETFs or investment funds).
 
-reporting_task:
-  description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Build a summary that includes:
+    1. User Financial Goals: Summarize the user's short-term and long-term financial
+       objectives.
+    2. Risk Profile: Assess the user's risk tolerance (conservative, moderate, aggressive).
+    3. Potential Securities: Identify a list of potential securities (stocks, bonds, ETFs,
+       investment funds) that align with the user's financial goals and risk profile. If the
+       user mentions specific companies, sectors, or asset classes, include those in the list.
+       Be specific about the securities, including ticker symbols where applicable.
+
+    Do not suggest next steps or actions. Focus solely on extracting and summarizing.
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
+    A detailed but short summary of the user's financial goals, risk tolerance,
+    and a list of potential securities that align with their profile.
+  agent: customer_support_representative
+
+research_market_data_task:
+  description: >
+    Analyze the latest securities (stocks, bonds, ETFs, investment funds) information
+    from reliable financial data sources, including SEC, Nasdaq, Yahoo Finance, Bloomberg,
+    and others. Focus on numerical data, performance metrics, and historical trends.
+    
+    If the the suggested securities are company stocks, focus on gathering data from 
+    10-Q and 10-K filings from EDGAR. Focus on key sections like Management's Discussion and
+    analysis, financial statements, insider trading activity, and any disclosed risks.
+
+    If the suggested securities are bonds, ETFs, or investment funds, gather data from
+    prospectuses, fund fact sheets, and performance reports. 
+    
+    Collaborate with the financial news researcher to ensure a comprehensive understanding
+    of both quantitative data and qualitative news factors affecting the securities future performance.
+  expected_output: >
+    A specific list with 10 bullet points of the most relevant financial data and trends about 
+    the identified securities and products.
+  agent: market_data_researcher
+
+news_research_task:
+  description: >
+    Conduct a thorough research about the latest financial news, rumors, and trends
+    related to the securities and products identified by the customer support representative.
+    Use reputable financial news sources such as Yahoo Finance, Reuters, CNBC, Financial Times,
+    Wall Street Journal, Bloomberg, and others.
+    
+    Focus on news that could impact the performance and perception of the identified securities.
+    Be specific about how each news item relates to the securities and products.
+
+    Collaborate with the market data researcher to ensure a comprehensive understanding
+    of both quantitative data and qualitative news factors affecting the securities future
+    performance.
+  expected_output: >  
+    A specific list with 10 bullet points of the most relevant financial news, rumors, and trends
+    about the identified securities and products.
+  agent: financial_news_researcher
+
+financial_advisement_task:
+  description: >
+    Review the context you got from the market data researcher and the financial news researcher.
+    Create a detailed report with a clear recommendation for the user about the securities
+    and products identified by the customer support representative. The report should include:
+
+    1. An executive summary of the findings.
+    2. A detailed analysis of the financial data and news.
+    3. A clear recommendation based on the user's financial goals and risk profile.
+    Do not copy and paste the information provided by the researchers. Synthesize the information
+    and provide your own insights and recommendations.
+
+    Collaborate with the customer support representative to ensure that the recommendations
+    align with the user's financial goals and risk tolerance.
+  expected_output: >
+    A comprehensive 500-word financial report in markdown format with sections for
+    executive summary, data analysis, news analysis, and recommendations.
     Formatted as markdown without '```'
-  agent: reporting_analyst
+  agent: financial_advisor

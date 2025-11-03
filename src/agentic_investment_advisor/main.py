@@ -14,7 +14,7 @@ load_dotenv()
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 opik.configure(api_key=os.getenv("OPIK_API_KEY"))
-track_crewai(project_name=os.getenv("OPIK_PROJETCT_NAME"))
+track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
