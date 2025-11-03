@@ -1,11 +1,12 @@
+import os
+
 from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from typing import List
-from agentic_investment_advisor.models import manager_llm, agent_llm
+from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import TavilySearchTool
 from dotenv import load_dotenv
-import os
+
+from agentic_investment_advisor.models import agent_llm
 
 load_dotenv()
 
@@ -20,8 +21,8 @@ tavily_tool = TavilySearchTool(api_key=os.getenv("TAVILY_API_KEY", ""), max_resu
 class AgenticInvestmentAdvisor:
     """AgenticInvestmentAdvisor crew"""
 
-    agents: List[BaseAgent]
-    tasks: List[Task]
+    agents: list[BaseAgent]
+    tasks: list[Task]
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -70,7 +71,8 @@ class AgenticInvestmentAdvisor:
     @crew
     def crew(self) -> Crew:
         """Creates the AgenticInvestmentAdvisor crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
+        # To learn how to add knowledge sources to your crew, check out the
+        # documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
         return Crew(

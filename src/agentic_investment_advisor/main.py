@@ -1,12 +1,12 @@
 #!/usr/bin/env python
+import os
 import sys
 import warnings
-import opik
-import os
+from datetime import datetime
 
+import opik
 from dotenv import load_dotenv
 from opik.integrations.crewai import track_crewai
-from datetime import datetime
 
 from agentic_investment_advisor.crew import AgenticInvestmentAdvisor
 
@@ -31,7 +31,7 @@ def run():
     try:
         AgenticInvestmentAdvisor().crew().kickoff(inputs=inputs)
     except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
+        raise Exception(f"An error occurred while running the crew: {e}") from e
 
 
 def train():
@@ -45,7 +45,7 @@ def train():
         )
 
     except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
+        raise Exception(f"An error occurred while training the crew: {e}") from e
 
 
 def replay():
@@ -56,7 +56,7 @@ def replay():
         AgenticInvestmentAdvisor().crew().replay(task_id=sys.argv[1])
 
     except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
+        raise Exception(f"An error occurred while replaying the crew: {e}") from e
 
 
 def test():
@@ -71,7 +71,7 @@ def test():
         )
 
     except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
+        raise Exception(f"An error occurred while testing the crew: {e}") from e
 
 
 def run_with_trigger():
@@ -87,8 +87,8 @@ def run_with_trigger():
 
     try:
         trigger_payload = json.loads(sys.argv[1])
-    except json.JSONDecodeError:
-        raise Exception("Invalid JSON payload provided as argument")
+    except json.JSONDecodeError as exc:
+        raise Exception("Invalid JSON payload provided as argument") from exc
 
     inputs = {
         "crewai_trigger_payload": trigger_payload,
@@ -100,4 +100,6 @@ def run_with_trigger():
         result = AgenticInvestmentAdvisor().crew().kickoff(inputs=inputs)
         return result
     except Exception as e:
-        raise Exception(f"An error occurred while running the crew with trigger: {e}")
+        raise Exception(
+            f"An error occurred while running the crew with trigger: {e}"
+        ) from e

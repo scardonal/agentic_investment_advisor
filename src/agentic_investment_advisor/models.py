@@ -2,10 +2,11 @@
 Module for defining models used in the agentic investment advisor application.
 """
 
+import os
+
 from crewai import LLM
 from dotenv import load_dotenv
 from portkey_ai import createHeaders
-import os
 
 load_dotenv()
 

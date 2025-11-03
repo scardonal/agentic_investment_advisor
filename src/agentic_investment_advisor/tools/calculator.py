@@ -1,7 +1,8 @@
-from crewai.tools import BaseTool
 import ast
 import operator
 import re
+
+from crewai.tools import BaseTool
 
 
 class CalculatorTool(BaseTool):
