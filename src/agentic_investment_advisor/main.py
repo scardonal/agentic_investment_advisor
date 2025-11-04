@@ -26,7 +26,10 @@ def run():
     """
     Run the crew.
     """
-    inputs = {"topic": "AI LLMs", "current_year": str(datetime.now().year)}
+    inputs = {
+        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
+        "for long-term growth. Which one should I choose?",
+    }
 
     try:
         AgenticInvestmentAdvisor().crew().kickoff(inputs=inputs)
@@ -38,7 +41,10 @@ def train():
     """
     Train the crew for a given number of iterations.
     """
-    inputs = {"topic": "AI LLMs", "current_year": str(datetime.now().year)}
+    inputs = {
+        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
+        "for long-term growth. Which one should I choose?",
+    }
     try:
         AgenticInvestmentAdvisor().crew().train(
             n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs
@@ -63,7 +69,10 @@ def test():
     """
     Test the crew execution and returns the results.
     """
-    inputs = {"topic": "AI LLMs", "current_year": str(datetime.now().year)}
+    inputs = {
+        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
+        "for long-term growth. Which one should I choose?",
+    }
 
     try:
         AgenticInvestmentAdvisor().crew().test(

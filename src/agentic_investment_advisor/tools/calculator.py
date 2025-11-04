@@ -64,6 +64,6 @@ class CalculatorTool(BaseTool):
             return result  # type: ignore
 
         except (SyntaxError, ValueError, ZeroDivisionError, TypeError) as e:
-            raise ValueError(f"Calculation error: {str(e)}")
-        except Exception:
-            raise ValueError("Invalid mathematical expression")
+            raise ValueError(f"Calculation error: {str(e)}") from e
+        except Exception as e:
+            raise ValueError("Invalid mathematical expression") from e

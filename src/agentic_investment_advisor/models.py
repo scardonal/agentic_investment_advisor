@@ -13,6 +13,8 @@ load_dotenv()
 PORTKEY_URL = os.getenv("PORTKEY_URL", "")
 PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY", "")
 
+# ToDo: Define LLM for final report generation
+
 manager_llm = LLM(
     model="gemini-2.5-pro",
     temperature=0,

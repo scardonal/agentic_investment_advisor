@@ -1,28 +1,37 @@
 user_profile_extraction_task:
   description: >
-    Based on the user message, extract and infer the user's
-    financial goals, risk profile, and potential securities of interest 
+    Based on the user profile, extract and infer the user's 
+    financial goals and interests, risk profile, and potential securities of interest 
     (stocks, bonds, ETFs or investment funds).
 
-    Build a summary that includes:
+    Build a short summary that includes:
+
     1. User Financial Goals: Summarize the user's short-term and long-term financial
-       objectives.
+       objectives and interests.
     2. Risk Profile: Assess the user's risk tolerance (conservative, moderate, aggressive).
     3. Potential Securities: Identify a list of potential securities (stocks, bonds, ETFs,
        investment funds) that align with the user's financial goals and risk profile. If the
        user mentions specific companies, sectors, or asset classes, include those in the list.
        Be specific about the securities, including ticker symbols where applicable.
 
-    Do not suggest next steps or actions. Focus solely on extracting and summarizing.
+    Do not suggest next steps or actions. Focus solely on extracting, summarizing and suggesting
+    potential securities.
+
+    ### User Profile ###
+
+    {user_profile}
+
+    ### End User Profile ###
   expected_output: >
-    A detailed but short summary of the user's financial goals, risk tolerance,
+    A detailed but concise 100-word summary of the user's financial goals, risk tolerance,
     and a list of potential securities that align with their profile.
   agent: customer_support_representative
 
 research_market_data_task:
   description: >
-    Analyze the latest securities (stocks, bonds, ETFs, investment funds) information
-    from reliable financial data sources, including SEC, Nasdaq, Yahoo Finance, Bloomberg,
+    Analyze the latest financial information related to the securities
+    and products identified by the customer support representative (stocks, bonds, ETFs, investment funds).
+    Gather the data from reliable financial data sources, including SEC, Nasdaq, Yahoo Finance, Bloomberg,
     and others. Focus on numerical data, performance metrics, and historical trends.
     
     If the the suggested securities are company stocks, focus on gathering data from 
@@ -32,16 +41,19 @@ research_market_data_task:
     If the suggested securities are bonds, ETFs, or investment funds, gather data from
     prospectuses, fund fact sheets, and performance reports. 
     
-    Collaborate with the financial news researcher to ensure a comprehensive understanding
-    of both quantitative data and qualitative news factors affecting the securities future performance.
+    Ensure a comprehensive understanding of quantitative factors affecting the securities future performance.
+    Make any necessary mathematical calculations to provide insights into the securities performance.
   expected_output: >
-    A specific list with 10 bullet points of the most relevant financial data and trends about 
-    the identified securities and products.
+    A specific 100-word report summarizing the most relevant financial quantitative data
+    and trends about the identified securities and products, including key metrics and historical performance.
   agent: market_data_researcher
+  async_execution: True
+  context:
+    - user_profile_extraction_task
 
-news_research_task:
+market_sentiment_task:
   description: >
-    Conduct a thorough research about the latest financial news, rumors, and trends
+    Analyze the latest financial news, rumors, and social media sentiment
     related to the securities and products identified by the customer support representative.
     Use reputable financial news sources such as Yahoo Finance, Reuters, CNBC, Financial Times,
     Wall Street Journal, Bloomberg, and others.
@@ -49,30 +61,37 @@ news_research_task:
     Focus on news that could impact the performance and perception of the identified securities.
     Be specific about how each news item relates to the securities and products.
 
-    Collaborate with the market data researcher to ensure a comprehensive understanding
-    of both quantitative data and qualitative news factors affecting the securities future
+    Ensure a comprehensive understanding qualitative news factors affecting the securities future
     performance.
   expected_output: >  
-    A specific list with 10 bullet points of the most relevant financial news, rumors, and trends
-    about the identified securities and products.
-  agent: financial_news_researcher
+    A specific 100-word report summarizing the most relevant financial news, rumors,
+    and social media sentiment about the identified securities and products.
+  agent: sentiment_analyst
+  async_execution: True
+  context:
+    - user_profile_extraction_task
 
 financial_advisement_task:
   description: >
-    Review the context you got from the market data researcher and the financial news researcher.
+    Review the context you got from the market data researcher and the sentiment analyst.
     Create a detailed report with a clear recommendation for the user about the securities
     and products identified by the customer support representative. The report should include:
 
     1. An executive summary of the findings.
-    2. A detailed analysis of the financial data and news.
+    2. A detailed analysis of the financial and market sentiment data.
     3. A clear recommendation based on the user's financial goals and risk profile.
-    Do not copy and paste the information provided by the researchers. Synthesize the information
-    and provide your own insights and recommendations.
+    
+    Do not just copy and paste the information provided by the researchers. Synthesize the information
+    and provide your own insights and recommendations assessing risks and potential rewards.
 
-    Collaborate with the customer support representative to ensure that the recommendations
-    align with the user's financial goals and risk tolerance.
+    Collaborate with the other agents if you need further clarification or additional information
+    to create a comprehensive report that aligns with the user's financial goals and risk tolerance.
   expected_output: >
     A comprehensive 500-word financial report in markdown format with sections for
-    executive summary, data analysis, news analysis, and recommendations.
+    executive summary, data and market sentiment analysis, and final recommendations.
     Formatted as markdown without '```'
   agent: financial_advisor
+  context:
+    - research_market_data_task
+    - market_sentiment_task
+    - user_profile_extraction_task
