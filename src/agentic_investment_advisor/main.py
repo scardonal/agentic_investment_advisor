@@ -2,7 +2,6 @@
 import os
 import sys
 import warnings
-from datetime import datetime
 
 import opik
 from dotenv import load_dotenv
@@ -27,8 +26,9 @@ def run():
     Run the crew.
     """
     inputs = {
-        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
-        "for long-term growth. Which one should I choose?",
+        "user_profile": "Hi. I’m John. I’m 45 and I want to incorporate these stocks"
+        " into my retirement fund: Apple and Johnson & Johnson."
+        " Is this a good idea right now?",
     }
 
     try:
@@ -42,8 +42,8 @@ def train():
     Train the crew for a given number of iterations.
     """
     inputs = {
-        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
-        "for long-term growth. Which one should I choose?",
+        "user_profile": "Hi, I'm Alex, 42 years old, and I'm planning for retirement in"
+        " 20 years. I want to invest in low-risk ETFs. What do you recommend?",
     }
     try:
         AgenticInvestmentAdvisor().crew().train(
@@ -70,8 +70,8 @@ def test():
     Test the crew execution and returns the results.
     """
     inputs = {
-        "user_profile": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ"
-        "for long-term growth. Which one should I choose?",
+        "user_profile": "Hi, I'm Alex, 42 years old, and I'm planning for retirement in"
+        " 20 years. I want to invest in low-risk ETFs. What do you recommend?",
     }
 
     try:

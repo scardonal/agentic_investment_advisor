@@ -6,7 +6,10 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
 
-from agentic_investment_advisor.models import agent_llm
+from agentic_investment_advisor.models import (
+    financial_advisor_llm,
+    sentiment_llm,
+)
 from agentic_investment_advisor.tools.calculator import CalculatorTool
 
 load_dotenv()
@@ -35,14 +38,14 @@ class AgenticInvestmentAdvisor:
     # https://docs.crewai.com/concepts/agents#agent-tools
 
     # ToDo: Add mcp tools to agents as needed
-    # ToDo: Create params yaml file for dynamic task parameters
+    # ToDo: Create params yaml file for dynamic tasks and LLM parameters
 
     @agent
     def customer_support_representative(self) -> Agent:
         return Agent(
             config=self.agents_config["customer_support_representative"],  # type: ignore[index]
             verbose=True,
-            llm=agent_llm,
+            llm=financial_advisor_llm,
             tools=[tavily_tool, scrape_tool],
             inject_date=True,
         )
@@ -52,7 +55,7 @@ class AgenticInvestmentAdvisor:
         return Agent(
             config=self.agents_config["market_data_researcher"],  # type: ignore[index]
             verbose=True,
-            llm=agent_llm,
+            llm=financial_advisor_llm,
             tools=[tavily_tool, scrape_tool, CalculatorTool()],
             allow_delegation=False,
             inject_date=True,
@@ -63,7 +66,7 @@ class AgenticInvestmentAdvisor:
         return Agent(
             config=self.agents_config["sentiment_analyst"],  # type: ignore[index]
             verbose=True,
-            llm=agent_llm,
+            llm=sentiment_llm,
             tools=[tavily_tool, scrape_tool],
             allow_delegation=False,
             inject_date=True,
@@ -74,7 +77,7 @@ class AgenticInvestmentAdvisor:
         return Agent(
             config=self.agents_config["financial_advisor"],  # type: ignore[index]
             verbose=True,
-            llm=agent_llm,
+            llm=financial_advisor_llm,
             tools=[tavily_tool, scrape_tool, CalculatorTool()],
             allow_delegation=True,
             inject_date=True,

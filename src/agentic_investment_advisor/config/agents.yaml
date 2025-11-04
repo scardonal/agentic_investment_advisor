@@ -27,7 +27,7 @@ market_data_researcher:
 
 sentiment_analyst:
   role: >
-    Sentiment Analyst
+    Market Sentiment Analyst
   goal: >
     Research the latest financial news, rumors and social media sentiment related the securities 
     and products identifed by the customer support representative.

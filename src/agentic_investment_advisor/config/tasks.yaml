@@ -13,6 +13,7 @@ user_profile_extraction_task:
        investment funds) that align with the user's financial goals and risk profile. If the
        user mentions specific companies, sectors, or asset classes, include those in the list.
        Be specific about the securities, including ticker symbols where applicable.
+       If the user does not mention specific securities, suggest a few based on their profile.
 
     Do not suggest next steps or actions. Focus solely on extracting, summarizing and suggesting
     potential securities.
@@ -34,7 +35,7 @@ research_market_data_task:
     Gather the data from reliable financial data sources, including SEC, Nasdaq, Yahoo Finance, Bloomberg,
     and others. Focus on numerical data, performance metrics, and historical trends.
     
-    If the the suggested securities are company stocks, focus on gathering data from 
+    If the the suggested securities are company stocks, focus on analyzing data from 
     10-Q and 10-K filings from EDGAR. Focus on key sections like Management's Discussion and
     analysis, financial statements, insider trading activity, and any disclosed risks.
 
@@ -44,7 +45,7 @@ research_market_data_task:
     Ensure a comprehensive understanding of quantitative factors affecting the securities future performance.
     Make any necessary mathematical calculations to provide insights into the securities performance.
   expected_output: >
-    A specific 100-word report summarizing the most relevant financial quantitative data
+    A 200-word report summarizing the most relevant financial quantitative data
     and trends about the identified securities and products, including key metrics and historical performance.
   agent: market_data_researcher
   async_execution: True
@@ -64,7 +65,7 @@ market_sentiment_task:
     Ensure a comprehensive understanding qualitative news factors affecting the securities future
     performance.
   expected_output: >  
-    A specific 100-word report summarizing the most relevant financial news, rumors,
+    A 200-word report summarizing the most relevant financial news, rumors,
     and social media sentiment about the identified securities and products.
   agent: sentiment_analyst
   async_execution: True
@@ -86,6 +87,7 @@ financial_advisement_task:
 
     Collaborate with the other agents if you need further clarification or additional information
     to create a comprehensive report that aligns with the user's financial goals and risk tolerance.
+    Make any necessary mathematical calculations to support your recommendations.
   expected_output: >
     A comprehensive 500-word financial report in markdown format with sections for
     executive summary, data and market sentiment analysis, and final recommendations.
@@ -95,3 +97,5 @@ financial_advisement_task:
     - research_market_data_task
     - market_sentiment_task
     - user_profile_extraction_task
+  markdown: True
+  output_file: financial_report.md
