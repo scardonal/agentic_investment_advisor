@@ -42,7 +42,7 @@ def run():
             },
         }
 
-        crew.kickoff(inputs=inputs, opik_args=args_dict)
+        crew.kickoff(inputs=inputs, opik_args=args_dict)  # type: ignore
 
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}") from e

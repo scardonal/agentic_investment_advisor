@@ -15,10 +15,7 @@ PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY", "")
 
 
 financial_advisor_llm = LLM(
-    # model="gpt-4o",
     model="gpt-5",
-    # temperature=0.15,
-    # max_tokens=2048,
     max_completion_tokens=2048,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
@@ -29,10 +26,7 @@ financial_advisor_llm = LLM(
 )
 
 sentiment_llm = LLM(
-    # model="gpt-4o-mini",
     model="gpt-5-mini",
-    # temperature=0.15,
-    # max_tokens=2048,
     max_completion_tokens=2048,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
@@ -41,3 +35,9 @@ sentiment_llm = LLM(
         provider="@azure-openai",
     ),
 )
+
+if main := __name__ == "__main__":
+    # Test the LLMs
+    test_prompt = "What is the current market sentiment for technology stocks?"
+    response = financial_advisor_llm.call(test_prompt)
+    print(response)
