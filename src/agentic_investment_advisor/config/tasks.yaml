@@ -13,10 +13,11 @@ user_profile_extraction_task:
        investment funds) that align with the user's financial goals and risk profile. If the
        user mentions specific companies, sectors, or asset classes, include those in the list.
        Be specific about the securities, including ticker symbols where applicable.
-       If the user does not mention specific securities, suggest a few based on their profile.
+       If the user does not mention specific securities, suggest them based on their profile 
+       and internet search results.
 
     Do not suggest next steps or actions. Focus solely on extracting, summarizing and suggesting
-    potential securities.
+    potential securities (stocks, bonds, ETFs or investment funds).
 
     ### User Profile ###
 
@@ -24,20 +25,21 @@ user_profile_extraction_task:
 
     ### End User Profile ###
   expected_output: >
-    A detailed but concise 100-word summary of the user's financial goals, risk tolerance,
-    and a list of potential securities that align with their profile.
+    A detailed 100-word summary of the user's financial goals, risk tolerance,
+    and a list of potential securities (stocks, bonds, ETFs or investment funds) that align with their profile.
   agent: customer_support_representative
 
 research_market_data_task:
   description: >
     Analyze the latest financial information related to the securities
     and products identified by the customer support representative (stocks, bonds, ETFs, investment funds).
+    
     Gather the data from reliable financial data sources, including SEC, Nasdaq, Yahoo Finance, Bloomberg,
     and others. Focus on numerical data, performance metrics, and historical trends.
     
     If the the suggested securities are company stocks, focus on analyzing data from 
-    10-Q and 10-K filings from EDGAR. Focus on key sections like Management's Discussion and
-    analysis, financial statements, insider trading activity, and any disclosed risks.
+    10-Q and 10-K filings from EDGAR (SEC). Focus on key sections like Management's Discussion and
+    analysis, financial statements, financial ratios, insider trading activity, and any disclosed risks.
 
     If the suggested securities are bonds, ETFs, or investment funds, gather data from
     prospectuses, fund fact sheets, and performance reports. 
@@ -46,7 +48,7 @@ research_market_data_task:
     Make any necessary mathematical calculations to provide insights into the securities performance.
   expected_output: >
     A 200-word report summarizing the most relevant financial quantitative data
-    and trends about the identified securities and products, including key metrics and historical performance.
+    and trends about the identified securities and products, including key metrics, ratios and historical performance.
   agent: market_data_researcher
   async_execution: True
   context:
@@ -54,15 +56,15 @@ research_market_data_task:
 
 market_sentiment_task:
   description: >
-    Analyze the latest financial news, rumors, and social media sentiment
+    Analyze the latest financial and macroeconomic news, rumors, and social media sentiment
     related to the securities and products identified by the customer support representative.
     Use reputable financial news sources such as Yahoo Finance, Reuters, CNBC, Financial Times,
     Wall Street Journal, Bloomberg, and others.
     
     Focus on news that could impact the performance and perception of the identified securities.
-    Be specific about how each news item relates to the securities and products.
+    Be specific about how each news item relates to the securities and products and gauge public perception.
 
-    Ensure a comprehensive understanding qualitative news factors affecting the securities future
+    Ensure a comprehensive understanding of news and market sentiment factors affecting the securities future
     performance.
   expected_output: >  
     A 200-word report summarizing the most relevant financial news, rumors,
@@ -79,7 +81,7 @@ financial_advisement_task:
     and products identified by the customer support representative. The report should include:
 
     1. An executive summary of the findings.
-    2. A detailed analysis of the financial and market sentiment data.
+    2. A detailed analysis of the financial (quantitative) and market sentiment data (qualitative).
     3. A clear recommendation based on the user's financial goals and risk profile.
     
     Do not just copy and paste the information provided by the researchers. Synthesize the information

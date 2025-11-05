@@ -1,5 +1,5 @@
 """
-Module for defining models used in the agentic investment advisor application.
+Module for defining LLM models used in the agentic investment advisor application.
 """
 
 import os
@@ -13,11 +13,13 @@ load_dotenv()
 PORTKEY_URL = os.getenv("PORTKEY_URL", "")
 PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY", "")
 
-# ToDo: Define LLM for final report generation
 
 financial_advisor_llm = LLM(
-    model="gpt-4o",
-    temperature=0.1,
+    # model="gpt-4o",
+    model="gpt-5",
+    # temperature=0.15,
+    # max_tokens=2048,
+    max_completion_tokens=2048,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
     extra_headers=createHeaders(
@@ -27,9 +29,11 @@ financial_advisor_llm = LLM(
 )
 
 sentiment_llm = LLM(
-    model="gpt-4o-mini",
-    temperature=0.1,
-    max_tokens=2048,
+    # model="gpt-4o-mini",
+    model="gpt-5-mini",
+    # temperature=0.15,
+    # max_tokens=2048,
+    max_completion_tokens=2048,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
     extra_headers=createHeaders(

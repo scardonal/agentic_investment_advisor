@@ -6,7 +6,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
 
-from agentic_investment_advisor.models import (
+from agentic_investment_advisor.llms import (
     financial_advisor_llm,
     sentiment_llm,
 )

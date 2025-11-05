@@ -26,9 +26,8 @@ def run():
     Run the crew.
     """
     inputs = {
-        "user_profile": "Hi. I’m John. I’m 45 and I want to incorporate these stocks"
-        " into my retirement fund: Apple and Johnson & Johnson."
-        " Is this a good idea right now?",
+        "user_profile": "Hi. I'm John. I'm 30 years and I want to plan my"
+        " retirement portfolio. I want to retire at 65. What do you recommend?",
     }
 
     try:
