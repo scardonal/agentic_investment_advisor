@@ -89,7 +89,8 @@ financial_advisement_task:
 
     Collaborate with the other agents if you need further clarification or additional information
     to create a comprehensive report that aligns with the user's financial goals and risk tolerance.
-    Make any necessary mathematical calculations to support your recommendations.
+    Make any necessary mathematical calculations to support your recommendations and ensure that numerical
+    data is consistent.
   expected_output: >
     A comprehensive 500-word financial report in markdown format with sections for
     executive summary, data and market sentiment analysis, and final recommendations.
@@ -100,4 +101,4 @@ financial_advisement_task:
     - market_sentiment_task
     - user_profile_extraction_task
   markdown: True
-  output_file: financial_report.md
+  output_file: output/financial_report.md

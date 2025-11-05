@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import uuid
 import warnings
 
 import opik
@@ -13,7 +14,6 @@ load_dotenv()
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 opik.configure(api_key=os.getenv("OPIK_API_KEY"))
-track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
@@ -31,7 +31,19 @@ def run():
     }
 
     try:
-        AgenticInvestmentAdvisor().crew().kickoff(inputs=inputs)
+        crew = AgenticInvestmentAdvisor().crew()
+
+        # Enable tracking with the crew instance (required for v1.0.0+)
+        track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
+        # Pass thread_id via opik_args
+        args_dict = {
+            "trace": {
+                "thread_id": str(uuid.uuid4()),
+            },
+        }
+
+        crew.kickoff(inputs=inputs, opik_args=args_dict)
+
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}") from e
 
