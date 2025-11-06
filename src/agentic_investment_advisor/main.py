@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import asyncio
 import os
 import sys
 import uuid
@@ -21,7 +22,7 @@ opik.configure(api_key=os.getenv("OPIK_API_KEY"))
 # interpolate any tasks and agents information
 
 
-def run():
+async def async_crew_execution():
     """
     Run the crew.
     """
@@ -41,10 +42,17 @@ def run():
             },
         }
 
-        crew.kickoff(inputs=inputs, opik_args=args_dict)  # type: ignore
+        await crew.kickoff_async(inputs=inputs)  # type: ignore
 
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}") from e
+
+
+def run():
+    """
+    Run the crew synchronously.
+    """
+    asyncio.run(async_crew_execution())
 
 
 def train():

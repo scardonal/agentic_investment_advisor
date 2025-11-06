@@ -6,6 +6,7 @@ from crewai.project import CrewBase, agent, crew, task, tool
 from crewai.tools import BaseTool
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
+from tavily import AsyncTavilyClient
 
 from agentic_investment_advisor.llms import (
     financial_advisor_llm,
@@ -27,16 +28,20 @@ class AgenticInvestmentAdvisor:
     agents: list[BaseAgent]
     tasks: list[Task]
 
-    # ToDo: Add mcp tools to agents as needed
     # ToDo: Create params yaml file for dynamic tasks and LLM parameters
 
     @tool
     def search_tool(self) -> BaseTool:
-        return TavilySearchTool(api_key=os.getenv("TAVILY_API_KEY", ""), max_results=4)
+        return TavilySearchTool(
+            async_client=AsyncTavilyClient(os.getenv("TAVILY_API_KEY", "")),
+            max_results=4,
+        )
 
     @tool
     def scrape_tool(self) -> BaseTool:
-        return TavilyExtractorTool(api_key=os.getenv("TAVILY_API_KEY", ""))
+        return TavilyExtractorTool(
+            async_client=AsyncTavilyClient(os.getenv("TAVILY_API_KEY", ""))
+        )
 
     @tool
     def calculator(self) -> BaseTool:

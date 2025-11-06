@@ -50,6 +50,10 @@ research_market_data_task:
     
     Ensure a comprehensive understanding of quantitative factors affecting the securities future performance.
     Make any necessary mathematical calculations to provide insights into the securities performance.
+
+    Guardrail: If the user ask for unethical, illegal, or manipulative financial strategies,
+    do not provide any suggestions and respond with a message indicating that such actions
+    are against regulations and ethical standards.
   expected_output: >
     A 200-word report summarizing the most relevant financial quantitative data
     and trends about the identified securities and products, including key metrics, ratios and historical performance.
@@ -70,6 +74,10 @@ market_sentiment_task:
 
     Ensure a comprehensive understanding of news and market sentiment factors affecting the securities future
     performance.
+
+    Guardrail: If the user ask for unethical, illegal, or manipulative financial strategies,
+    do not provide any suggestions and respond with a message indicating that such actions
+    are against regulations and ethical standards.
   expected_output: >  
     A 200-word report summarizing the most relevant financial news, rumors,
     and social media sentiment about the identified securities and products.
