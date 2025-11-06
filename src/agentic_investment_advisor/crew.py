@@ -21,6 +21,37 @@ load_dotenv()
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 
+def check_guardrail_input(inputs) -> None:
+    """
+    Guardrail to check for unethical or illegal requests
+    and break execution if detected.
+    """
+    unethical_keywords = [
+        "manipulate stock prices",
+        "insider trading",
+        "tax evasion",
+        "money laundering",
+        "fraudulent",
+        "unethical",
+        "illegal",
+        "bribe",
+        "embezzle",
+        "front running",
+        "market abuse",
+        "mislead investors",
+    ]
+    user_query = inputs.get("query", "").lower()
+    for keyword in unethical_keywords:
+        if keyword in user_query:
+            break_message = (
+                "I'm sorry, but I cannot assist with requests that involve "
+                "unethical or illegal activities. If you have any other questions "
+                "or need assistance with legitimate investment strategies, "
+                "feel free to ask!"
+            )
+            raise Exception(break_message)
+
+
 @CrewBase
 class AgenticInvestmentAdvisor:
     """AgenticInvestmentAdvisor crew"""
@@ -29,36 +60,6 @@ class AgenticInvestmentAdvisor:
     tasks: list[Task]
 
     # ToDo: Create params yaml file for dynamic tasks and LLM parameters
-    @before_kickoff
-    def guardrail_input(self, inputs):
-        """
-        Guardrail to check for unethical or illegal requests
-        and break execution if detected.
-        """
-        unethical_keywords = [
-            "manipulate stock prices",
-            "insider trading",
-            "tax evasion",
-            "money laundering",
-            "fraudulent",
-            "unethical",
-            "illegal",
-            "bribe",
-            "embezzle",
-            "front running",
-            "market abuse",
-            "mislead investors",
-        ]
-        user_query = inputs.get("query", "").lower()
-        for keyword in unethical_keywords:
-            if keyword in user_query:
-                break_message = (
-                    "I'm sorry, but I cannot assist with requests that involve "
-                    "unethical or illegal activities. If you have any other questions "
-                    "or need assistance with legitimate investment strategies, "
-                    "feel free to ask!"
-                )
-                raise Exception(break_message)
 
     @tool
     def search_tool(self) -> BaseTool:
@@ -139,6 +140,7 @@ class AgenticInvestmentAdvisor:
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
+            name="Agentic Investment Advisor",
         )
 
 
@@ -156,7 +158,7 @@ if __name__ == "__main__":
 
     # Test the crew creation
     advisor_crew = AgenticInvestmentAdvisor().crew()
-    print("Crew created successfully:", advisor_crew)
+    print("Crew created successfully:", advisor_crew.name)
 
     inputs = {
         "query": "Hi, I'm Sam, and I want to know the best way to manipulate"
@@ -167,15 +169,17 @@ if __name__ == "__main__":
         """
         Run the crew.
         """
-
+        try:
+            # Run guardrail check first
+            check_guardrail_input(inputs)
+        except Exception as e:
+            print(f"Request blocked: {e}")
+            return
         try:
             crew = AgenticInvestmentAdvisor().crew()
-
             # Enable tracking with the crew instance (required for v1.0.0+)
             track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
-
             await crew.kickoff_async(inputs=inputs)  # type: ignore
-
         except Exception as e:
             raise Exception(f"An error occurred while running the crew: {e}") from e
 
