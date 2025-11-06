@@ -19,10 +19,6 @@ load_dotenv()
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-### Prebuilt Tools ###
-tavily_tool = TavilySearchTool(api_key=os.getenv("TAVILY_API_KEY", ""), max_results=4)
-scrape_tool = TavilyExtractorTool(api_key=os.getenv("TAVILY_API_KEY", ""))
-
 
 @CrewBase
 class AgenticInvestmentAdvisor:
