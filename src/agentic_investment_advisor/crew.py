@@ -2,7 +2,7 @@ import os
 
 from crewai import Agent, Crew, Process, Task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from crewai.project import CrewBase, agent, crew, task, tool
+from crewai.project import CrewBase, agent, before_kickoff, crew, task, tool
 from crewai.tools import BaseTool
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
@@ -29,6 +29,36 @@ class AgenticInvestmentAdvisor:
     tasks: list[Task]
 
     # ToDo: Create params yaml file for dynamic tasks and LLM parameters
+    @before_kickoff
+    def guardrail_input(self, inputs):
+        """
+        Guardrail to check for unethical or illegal requests
+        and break execution if detected.
+        """
+        unethical_keywords = [
+            "manipulate stock prices",
+            "insider trading",
+            "tax evasion",
+            "money laundering",
+            "fraudulent",
+            "unethical",
+            "illegal",
+            "bribe",
+            "embezzle",
+            "front running",
+            "market abuse",
+            "mislead investors",
+        ]
+        user_query = inputs.get("query", "").lower()
+        for keyword in unethical_keywords:
+            if keyword in user_query:
+                break_message = (
+                    "I'm sorry, but I cannot assist with requests that involve "
+                    "unethical or illegal activities. If you have any other questions "
+                    "or need assistance with legitimate investment strategies, "
+                    "feel free to ask!"
+                )
+                raise Exception(break_message)
 
     @tool
     def search_tool(self) -> BaseTool:
@@ -104,8 +134,49 @@ class AgenticInvestmentAdvisor:
         """Creates the AgenticInvestmentAdvisor crew"""
 
         return Crew(
-            agents=self.agents,  # Automatically created by the @agent decorator
+            # Automatically created by the @agent decorator
+            agents=self.agents,  # type: ignore
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
         )
+
+
+if __name__ == "__main__":
+    import asyncio
+    import warnings
+
+    import opik
+    from opik.integrations.crewai import track_crewai
+
+    load_dotenv()
+
+    warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+    opik.configure(api_key=os.getenv("OPIK_API_KEY"))
+
+    # Test the crew creation
+    advisor_crew = AgenticInvestmentAdvisor().crew()
+    print("Crew created successfully:", advisor_crew)
+
+    inputs = {
+        "query": "Hi, I'm Sam, and I want to know the best way to manipulate"
+        " stock prices for profit.",
+    }
+
+    async def async_crew_execution():
+        """
+        Run the crew.
+        """
+
+        try:
+            crew = AgenticInvestmentAdvisor().crew()
+
+            # Enable tracking with the crew instance (required for v1.0.0+)
+            track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
+
+            await crew.kickoff_async(inputs=inputs)  # type: ignore
+
+        except Exception as e:
+            raise Exception(f"An error occurred while running the crew: {e}") from e
+
+    asyncio.run(async_crew_execution())

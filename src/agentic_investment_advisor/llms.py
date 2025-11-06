@@ -2,6 +2,7 @@
 Module for defining LLM models used in the agentic investment advisor application.
 """
 
+# ToDo: Create custom LLM wrapper for Portkey AI to handle async calls and streaming
 import os
 
 from crewai import LLM
@@ -17,8 +18,9 @@ PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY", "")
 financial_advisor_llm = LLM(
     model="gemini-2.5-pro",
     temperature=0.1,
-    base_url=PORTKEY_URL,
     api_key="dummy_key",
+    stream=True,
+    base_url=PORTKEY_URL,
     extra_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
         provider="@dsvertex",
@@ -28,8 +30,9 @@ financial_advisor_llm = LLM(
 sentiment_llm = LLM(
     model="gemini-2.5-flash",
     temperature=0.1,
-    base_url=PORTKEY_URL,
     api_key="dummy_key",
+    stream=True,
+    base_url=PORTKEY_URL,
     extra_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
         provider="@dsvertex",
