@@ -2,7 +2,8 @@ import os
 
 from crewai import Agent, Crew, Process, Task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from crewai.project import CrewBase, agent, crew, task
+from crewai.project import CrewBase, agent, crew, task, tool
+from crewai.tools import BaseTool
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
 
@@ -30,62 +31,49 @@ class AgenticInvestmentAdvisor:
     agents: list[BaseAgent]
     tasks: list[Task]
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
-
     # ToDo: Add mcp tools to agents as needed
     # ToDo: Create params yaml file for dynamic tasks and LLM parameters
+
+    @tool
+    def search_tool(self) -> BaseTool:
+        return TavilySearchTool(api_key=os.getenv("TAVILY_API_KEY", ""), max_results=4)
+
+    @tool
+    def scrape_tool(self) -> BaseTool:
+        return TavilyExtractorTool(api_key=os.getenv("TAVILY_API_KEY", ""))
+
+    @tool
+    def calculator(self) -> BaseTool:
+        return CalculatorTool()
 
     @agent
     def customer_support_representative(self) -> Agent:
         return Agent(
             config=self.agents_config["customer_support_representative"],  # type: ignore[index]
-            verbose=True,
             llm=financial_advisor_llm,
-            tools=[tavily_tool, scrape_tool],
-            inject_date=True,
         )
 
     @agent
     def market_data_researcher(self) -> Agent:
         return Agent(
             config=self.agents_config["market_data_researcher"],  # type: ignore[index]
-            verbose=True,
             llm=financial_advisor_llm,
-            tools=[tavily_tool, scrape_tool, CalculatorTool()],
-            allow_delegation=False,
-            inject_date=True,
         )
 
     @agent
     def sentiment_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config["sentiment_analyst"],  # type: ignore[index]
-            verbose=True,
             llm=sentiment_llm,
-            tools=[tavily_tool, scrape_tool],
-            allow_delegation=False,
-            inject_date=True,
         )
 
     @agent
     def financial_advisor(self) -> Agent:
         return Agent(
             config=self.agents_config["financial_advisor"],  # type: ignore[index]
-            verbose=True,
             llm=financial_advisor_llm,
-            tools=[tavily_tool, scrape_tool, CalculatorTool()],
-            allow_delegation=True,
-            inject_date=True,
         )
 
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def user_profile_extraction_task(self) -> Task:
         return Task(
@@ -113,14 +101,10 @@ class AgenticInvestmentAdvisor:
     @crew
     def crew(self) -> Crew:
         """Creates the AgenticInvestmentAdvisor crew"""
-        # To learn how to add knowledge sources to your crew, check out the
-        # documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
         return Crew(
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

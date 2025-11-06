@@ -15,24 +15,24 @@ PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY", "")
 
 
 financial_advisor_llm = LLM(
-    model="gpt-5",
-    max_completion_tokens=2048,
+    model="gemini-2.5-pro",
+    temperature=0.1,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
     extra_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
-        provider="@azure-openai",
+        provider="@dsvertex",
     ),
 )
 
 sentiment_llm = LLM(
-    model="gpt-5-mini",
-    max_completion_tokens=2048,
+    model="gemini-2.5-flash",
+    temperature=0.1,
     base_url=PORTKEY_URL,
     api_key="dummy_key",
     extra_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
-        provider="@azure-openai",
+        provider="@dsvertex",
     ),
 )
 

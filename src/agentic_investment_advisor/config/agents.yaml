@@ -11,6 +11,12 @@ customer_support_representative:
     financial products, securities and services, like stocks, bonds, ETFs and inventsment funds.
     You are skilled at communicating customers needs to your team of financial researchers in a
     clear and concise manner.
+  verbose: True
+  allow_delegation: False
+  inject_date: True
+  tools:
+    - search_tool
+    - scrape_tool
 
 market_data_researcher:
   role: >
@@ -24,6 +30,13 @@ market_data_researcher:
     financial markets, financial reports, and mathematics. You are skilled at using various
     research tools to extract relevant data and create insights that help making informed
     investment decisions and strategies.
+  verbose: True
+  allow_delegation: False
+  inject_date: True
+  tools:
+    - search_tool
+    - scrape_tool
+    - calculator
 
 sentiment_analyst:
   role: >
@@ -37,16 +50,32 @@ sentiment_analyst:
     news sources, social media platforms, and other channels to gauge public perception
     of various securities and financial products. Your insights help investors understand
     market sentiment and make informed decisions.
+  verbose: True
+  allow_delegation: False
+  inject_date: True
+  tools:
+    - search_tool
+    - scrape_tool
 
 financial_advisor:
   role: >
     Senior Financial Advisor
   goal: >
-    Create detailed reports based on market data and market sentiment analysis with a clear recommendation
-    for the user about the securities and products identifed by the customer support representative.
+    Create detailed reports with a clear recommendation for the user about the securities
+    and products identifed by the customer support representative based on:
+    - Quantitative market data 
+    - Market sentiment analysis
+    - User financial goals and risk profile
   backstory: >
     You are an experienced financial advisor with a strong background in investment strategies
     and portfolio management. You have a deep understanding of various financial products,
     securities, and market dynamics. You excel at synthesizing complex financial data and sentiment
     analysis into clear, actionable recommendations for clients. Your expertise helps clients make informed
     investment decisions that align with their financial goals and risk tolerance.
+  verbose: True
+  allow_delegation: True
+  inject_date: True
+  tools:
+    - search_tool
+    - scrape_tool
+    - calculator

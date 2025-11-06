@@ -1,6 +1,6 @@
 user_profile_extraction_task:
   description: >
-    Based on the user profile, extract and infer the user's 
+    Based on the user query, extract and infer the user's 
     financial goals and interests, risk profile, and potential securities of interest 
     (stocks, bonds, ETFs or investment funds).
 
@@ -19,11 +19,15 @@ user_profile_extraction_task:
     Do not suggest next steps or actions. Focus solely on extracting, summarizing and suggesting
     potential securities (stocks, bonds, ETFs or investment funds).
 
-    ### User Profile ###
+    Guardrail: If the user ask for unethical, illegal, or manipulative financial strategies,
+    do not provide any suggestions and respond with a message indicating that such actions
+    are against regulations and ethical standards.
 
-    {user_profile}
+    ### User Profile or Query ###
 
-    ### End User Profile ###
+    {query}
+
+    ### End User Profile or Query ###
   expected_output: >
     A detailed 100-word summary of the user's financial goals, risk tolerance,
     and a list of potential securities (stocks, bonds, ETFs or investment funds) that align with their profile.
@@ -82,15 +86,27 @@ financial_advisement_task:
 
     1. An executive summary of the findings.
     2. A detailed analysis of the financial (quantitative) and market sentiment data (qualitative).
-    3. A clear recommendation based on the user's financial goals and risk profile.
-    
+    3. A clear recommendation based on the user's financial goals, risk profile and the original user query.
+        
     Do not just copy and paste the information provided by the researchers. Synthesize the information
-    and provide your own insights and recommendations assessing risks and potential rewards.
+    and provide your own insights and recommendations assessing risks and potential rewards. 
 
     Collaborate with the other agents if you need further clarification or additional information
     to create a comprehensive report that aligns with the user's financial goals and risk tolerance.
     Make any necessary mathematical calculations to support your recommendations and ensure that numerical
     data is consistent.
+
+    Guardrail: If the user ask for unethical, illegal, or manipulative financial strategies,
+    do not provide any report and respond with a message indicating that such actions
+    are against regulations and ethical standards.
+
+    This is the original user query for reference:
+
+    ### User Profile or Query ###
+
+    {query}
+
+    ### End User Profile or Query ###
   expected_output: >
     A comprehensive 500-word financial report in markdown format with sections for
     executive summary, data and market sentiment analysis, and final recommendations.

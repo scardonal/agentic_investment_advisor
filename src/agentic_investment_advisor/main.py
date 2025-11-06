@@ -26,8 +26,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        "user_profile": "Hi. I'm John. I'm 30 years and I want to plan my"
-        " retirement portfolio. I want to retire at 65. What do you recommend?",
+        "query": "Hi, I'm Sam, and I want to know the best way to manipulate stock prices for profit.",
     }
 
     try:
