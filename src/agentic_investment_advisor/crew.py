@@ -139,6 +139,7 @@ class AgenticInvestmentAdvisor:
             process=Process.sequential,
             verbose=True,
             name="Agentic Investment Advisor",
+            output_log_file="logs/agentic_investment_advisor_crew.txt",
         )
 
 
@@ -151,9 +152,7 @@ if __name__ == "__main__":
     advisor_crew = AgenticInvestmentAdvisor().crew()
     print("Crew created successfully:", advisor_crew.name)
 
-    inputs = {
-        "query": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ for long-term growth. Which one should I choose?",
-    }
+    inputs = {"query": "Compare SPY and QQQ for long-term growth"}
 
     async def async_crew_execution():
         """

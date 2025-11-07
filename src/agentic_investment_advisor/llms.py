@@ -48,4 +48,4 @@ gemini_flash_llm = LLM(
 if main := __name__ == "__main__":
     # Test the LLMs
     test_prompt = "What is the current market sentiment for technology stocks?"
-    gemini_pro_llm.call(test_prompt)
+    print(gemini_pro_llm.call(test_prompt))

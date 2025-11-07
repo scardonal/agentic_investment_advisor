@@ -1,0 +1,38 @@
+llm_models:
+  gemini_pro:
+    model: gemini-2.5-pro
+    temperature: 0.1
+    api_key: dummy_key
+    stream: false # It seems that streaming is not working well with Portkey
+    extra_headers:
+      provider: "@dsvertex"
+
+  gemini_flash:
+    model: gemini-2.5-flash
+    temperature: 0.1
+    api_key: dummy_key
+    stream: false # It seems that streaming is not working well with Portkey
+    extra_headers:
+      provider: "@dsvertex"
+
+tools:
+  tavily_search_tool:
+    max_results: 5
+
+guardrails:
+  prohibited_keywords:
+    - "manipulate stock prices"
+    - "insider trading"
+    - "tax evasion"
+    - "money laundering"
+    - "fraudulent"
+    - "unethical"
+    - "illegal"
+    - "bribe"
+    - "embezzle"
+    - "front running"
+    - "market abuse"
+    - "mislead investors"
+  break_message: >
+    I'm sorry, but I cannot assist with that request as it involves actions that are against
+     regulations and ethical standards.
