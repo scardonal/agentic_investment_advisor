@@ -14,6 +14,7 @@ customer_support_representative:
   verbose: True
   allow_delegation: False
   inject_date: True
+  llm: gemini_pro
   tools:
     - search_tool
     - scrape_tool
@@ -33,6 +34,7 @@ market_data_researcher:
   verbose: True
   allow_delegation: False
   inject_date: True
+  llm: gemini_pro
   tools:
     - search_tool
     - scrape_tool
@@ -53,6 +55,7 @@ sentiment_analyst:
   verbose: True
   allow_delegation: False
   inject_date: True
+  llm: gemini_flash
   tools:
     - search_tool
     - scrape_tool
@@ -75,6 +78,7 @@ financial_advisor:
   verbose: True
   allow_delegation: True
   inject_date: True
+  llm: gemini_pro
   tools:
     - search_tool
     - scrape_tool

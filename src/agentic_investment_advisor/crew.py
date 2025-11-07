@@ -1,24 +1,30 @@
+import asyncio
 import os
+import time
+import warnings
 
-from crewai import Agent, Crew, Process, Task
+import opik
+import yaml
+from crewai import LLM, Agent, Crew, Process, Task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from crewai.project import CrewBase, agent, before_kickoff, crew, task, tool
+from crewai.project import CrewBase, agent, crew, llm, task, tool
 from crewai.tools import BaseTool
 from crewai_tools import TavilyExtractorTool, TavilySearchTool
 from dotenv import load_dotenv
+from opik.integrations.crewai import track_crewai
 from tavily import AsyncTavilyClient
 
 from agentic_investment_advisor.llms import (
-    financial_advisor_llm,
-    sentiment_llm,
+    gemini_flash_llm,
+    gemini_pro_llm,
 )
 from agentic_investment_advisor.tools.calculator import CalculatorTool
 
 load_dotenv()
 
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+params_path = os.path.join(os.path.dirname(__file__), "config", "params.yaml")
+with open(params_path) as f:
+    params = yaml.safe_load(f)
 
 
 def check_guardrail_input(inputs) -> None:
@@ -26,28 +32,12 @@ def check_guardrail_input(inputs) -> None:
     Guardrail to check for unethical or illegal requests
     and break execution if detected.
     """
-    unethical_keywords = [
-        "manipulate stock prices",
-        "insider trading",
-        "tax evasion",
-        "money laundering",
-        "fraudulent",
-        "unethical",
-        "illegal",
-        "bribe",
-        "embezzle",
-        "front running",
-        "market abuse",
-        "mislead investors",
-    ]
+    unethical_keywords = params.get("guardrails", {}).get("prohibited_keywords", [])
     user_query = inputs.get("query", "").lower()
     for keyword in unethical_keywords:
         if keyword in user_query:
-            break_message = (
-                "I'm sorry, but I cannot assist with requests that involve "
-                "unethical or illegal activities. If you have any other questions "
-                "or need assistance with legitimate investment strategies, "
-                "feel free to ask!"
+            break_message = params.get("guardrails", {}).get(
+                "break_message", "Request contains prohibited content."
             )
             raise Exception(break_message)
 
@@ -59,13 +49,21 @@ class AgenticInvestmentAdvisor:
     agents: list[BaseAgent]
     tasks: list[Task]
 
-    # ToDo: Create params yaml file for dynamic tasks and LLM parameters
+    @llm
+    def gemini_pro(self) -> LLM:
+        return gemini_pro_llm
+
+    @llm
+    def gemini_flash(self) -> LLM:
+        return gemini_flash_llm
 
     @tool
     def search_tool(self) -> BaseTool:
         return TavilySearchTool(
             async_client=AsyncTavilyClient(os.getenv("TAVILY_API_KEY", "")),
-            max_results=4,
+            max_results=params.get("tools", {})
+            .get("tavily_search_tool", {})
+            .get("max_results", 5),
         )
 
     @tool
@@ -82,28 +80,28 @@ class AgenticInvestmentAdvisor:
     def customer_support_representative(self) -> Agent:
         return Agent(
             config=self.agents_config["customer_support_representative"],  # type: ignore[index]
-            llm=financial_advisor_llm,
+            llm=gemini_pro_llm,
         )
 
     @agent
     def market_data_researcher(self) -> Agent:
         return Agent(
             config=self.agents_config["market_data_researcher"],  # type: ignore[index]
-            llm=financial_advisor_llm,
+            llm=gemini_pro_llm,
         )
 
     @agent
     def sentiment_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config["sentiment_analyst"],  # type: ignore[index]
-            llm=sentiment_llm,
+            llm=gemini_flash_llm,
         )
 
     @agent
     def financial_advisor(self) -> Agent:
         return Agent(
             config=self.agents_config["financial_advisor"],  # type: ignore[index]
-            llm=financial_advisor_llm,
+            llm=gemini_pro_llm,
         )
 
     @task
@@ -145,13 +143,6 @@ class AgenticInvestmentAdvisor:
 
 
 if __name__ == "__main__":
-    import asyncio
-    import warnings
-
-    import opik
-    from opik.integrations.crewai import track_crewai
-
-    load_dotenv()
 
     warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
     opik.configure(api_key=os.getenv("OPIK_API_KEY"))
@@ -161,8 +152,7 @@ if __name__ == "__main__":
     print("Crew created successfully:", advisor_crew.name)
 
     inputs = {
-        "query": "Hi, I'm Sam, and I want to know the best way to manipulate"
-        " stock prices for profit.",
+        "query": "Hi, I'm Priya, 45, and I'm evaluating SPY and QQQ for long-term growth. Which one should I choose?",
     }
 
     async def async_crew_execution():
@@ -183,4 +173,7 @@ if __name__ == "__main__":
         except Exception as e:
             raise Exception(f"An error occurred while running the crew: {e}") from e
 
+    start_time = time.time()
     asyncio.run(async_crew_execution())
+    end_time = time.time()
+    print(f"Execution time: {end_time - start_time:.2f} seconds")
