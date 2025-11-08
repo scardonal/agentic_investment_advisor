@@ -12,6 +12,7 @@ dependencies = [
     "portkey-ai>=2.0.2",
     "python-dotenv>=1.2.1",
     "tavily-python>=0.7.12",
+    "fastapi-limiter>=0.1.5",
 ]
 
 [project.scripts]
