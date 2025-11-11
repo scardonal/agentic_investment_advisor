@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  agentic-investment-advisor:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+      - ./output:/app/output
+      - ./knowledge:/app/knowledge
+      - ./.env:/app/.env # Mount the .env file as a volume
+    # Uncomment to override environment variables
+    # environment:
+    #   - PORT=8000
+    #   - CREW_TIMEOUT=780

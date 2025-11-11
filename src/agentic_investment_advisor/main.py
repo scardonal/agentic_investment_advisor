@@ -20,6 +20,8 @@ import warnings
 from datetime import datetime
 from typing import Any
 
+from dotenv import load_dotenv
+
 # Third-party imports
 from fastapi import Body, FastAPI, status
 from fastapi.exceptions import RequestValidationError
@@ -32,6 +34,8 @@ from agentic_investment_advisor.crew import (
     AgenticInvestmentAdvisor,
     check_guardrail_input,
 )
+
+load_dotenv()
 
 # Define module-level constants for FastAPI Body configurations
 QUERY_BODY = Body(
@@ -203,9 +207,7 @@ async def run_crew(query: Query = QUERY_BODY) -> ResponseModel:
         # Run the crew with a configurable timeout to prevent hanging requests
         result = await asyncio.wait_for(
             advisor_crew.kickoff_async(inputs=inputs),
-            timeout=float(
-                os.getenv("CREW_TIMEOUT", "780.0")
-            ),  # Default 60 seconds if not configured
+            timeout=float(os.getenv("CREW_TIMEOUT", "780.0")),
         )
 
         # Calculate processing time and log success
