@@ -272,12 +272,12 @@ async def health_check():
     return {"status": "healthy", "timestamp": datetime.now()}
 
 
-if __name__ == "__main__":
+def run_app():
     """
-    Entry point when running the module directly.
+    Entry point function for running the application.
 
-    This allows the API to be started with `python -m agentic_investment_advisor.main`
-    and configures the uvicorn ASGI server with appropriate settings.
+    This function is used as an entry point for the CLI script and
+    configures the uvicorn ASGI server with appropriate settings.
     """
     import uvicorn
 
@@ -291,3 +291,13 @@ if __name__ == "__main__":
         port=int(os.getenv("PORT", "8000")),  # Use PORT env var or default to 8000
         reload=True,  # Enable auto-reload during development
     )
+
+
+if __name__ == "__main__":
+    """
+    Entry point when running the module directly.
+
+    This allows the API to be started with `python -m agentic_investment_advisor.main`
+    and configures the uvicorn ASGI server with appropriate settings.
+    """
+    run_app()

@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-agentic_investment_advisor = "agentic_investment_advisor.main"
+agentic_investment_advisor = "agentic_investment_advisor.main:run_app"
 
 [build-system]
 requires = ["hatchling"]
