@@ -169,6 +169,7 @@ if __name__ == "__main__":
             # Enable tracking with the crew instance (required for v1.0.0+)
             track_crewai(project_name=os.getenv("OPIK_PROJECT_NAME"))
             await crew.kickoff_async(inputs=inputs)  # type: ignore
+            
         except Exception as e:
             raise Exception(f"An error occurred while running the crew: {e}") from e
 
