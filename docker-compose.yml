@@ -1,5 +1,5 @@
 services:
-  agentic-investment-advisor:
+  agent:
     build: .
     ports:
       - "8000:8000"

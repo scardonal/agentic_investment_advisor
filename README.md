@@ -1,6 +1,6 @@
 # Agentic Investment Advisor
 
-Welcome to the Agentic Investment Advisor, a sophisticated multi-agent AI system powered by [crewAI](https://crewai.com). This application leverages a team of specialized AI agents that collaborate to provide comprehensive investment recommendations based on financial data analysis, market sentiment, and user preferences.
+Welcome to the Agentic Investment Advisor, a sophisticated multi-agent AI system powered by [CrewAI](https://crewai.com). This application leverages a team of specialized AI agents that collaborate to provide comprehensive investment recommendations based on financial data analysis, market sentiment, and user preferences.
 
 ## Key Features
 
@@ -16,6 +16,8 @@ Welcome to the Agentic Investment Advisor, a sophisticated multi-agent AI system
 
 The Agentic Investment Advisor consists of four specialized agents that work together in a sequential workflow:
 
+![Agentic Investment Advisor Architecture](Agentic%20Advisor.png)
+
 1. **Customer Support Representative**: Extracts user financial goals, risk profile, and potential securities of interest
 2. **Financial Data Researcher**: Analyzes quantitative financial data and trends for the identified securities
 3. **Market Sentiment Analyst**: Researches financial news, rumors, and social media sentiment
@@ -25,6 +27,12 @@ These agents utilize various tools:
 - Web Search (Tavily)
 - Web Scraper (Tavily)
 - Calculator (for financial calculations)
+
+The system expects user text input with user context, such as name, age, a financial query, or interests. If the user doesn't provide enough context, the Customer Support Agent will try to infer the user profile based on the user's input and some web search.
+
+This app could be used in different ways:
+- As an AI assistant for the final user that sends a report via email to them or to another system, like a CRM.
+- As an internal AI copilot for the human financial advisor that improves the quality of the final recommendation and boosts productivity.
 
 ## Installation
 
@@ -43,7 +51,7 @@ pip install uv
 
 2. Clone the repository and navigate to the project directory:
 ```bash
-git clone https://github.com/yourusername/agentic_investment_advisor.git
+git clone https://github.com/scardonal/agentic_investment_advisor.git
 cd agentic_investment_advisor
 ```
 
@@ -58,7 +66,7 @@ uv pip install -e .
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/agentic_investment_advisor.git
+git clone https://github.com/scardonal/agentic_investment_advisor.git
 cd agentic_investment_advisor
 ```
 
@@ -153,23 +161,6 @@ Response:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
-## Agentic System
-
-![Agentic Investment Advisor Architecture](Agentic%20Advisor.png)
-
-1. **User Query Processing**:
-   - The Customer Support Representative agent extracts the user's financial goals, risk profile, and potential securities of interest from the query.
-
-2. **Parallel Research**:
-   - The Financial Data Researcher analyzes quantitative financial data for the identified securities.
-   - The Market Sentiment Analyst researches news and social media sentiment related to these securities.
-
-3. **Investment Recommendation**:
-   - The Investment Advisor synthesizes all gathered information and creates a detailed report with clear recommendations.
-
-4. **Report Generation**:
-   - A comprehensive investment report is generated in markdown format and saved to the `output/` directory.
-
 ## Project Structure
 
 ```
@@ -234,3 +225,47 @@ Modify the `tasks.yaml` file to:
 - Change task descriptions and expected outputs
 - Configure task dependencies and context
 - Adjust task execution flow
+
+## Evaluation Strategy
+
+This section outlines a comprehensive approach to evaluate the performance of the Agentic Investment Advisor system.
+
+### Offline Evaluation
+
+Offline evaluation assesses the system's performance using historical data and expert judgment before deploying updates to users.
+
+1. **Data Collection**:
+   - Compile a dataset of historical user queries with known expected outcomes
+   - Include diverse investment scenarios across different market conditions
+   - Ensure representation of various risk profiles and investment goals
+
+2. **Evaluation Methods**:
+   - **LLM-as-a-Judge**: Use specialized LLMs to evaluate the quality and accuracy of investment recommendations
+   - **Financial Expert Review**: Engage professional financial advisors to assess recommendation quality
+   - **Backtesting**: Compare recommended portfolios against historical market performance
+
+3. **Key Metrics**:
+   - Recommendation accuracy (compared to expert consensus)
+   - Portfolio performance (risk-adjusted returns)
+   - Completeness of analysis (coverage of relevant factors)
+   - Adherence to user risk profiles and goals
+
+### Online Evaluation
+
+Online evaluation measures the system's performance during actual user interactions in production.
+
+1. **User Feedback Collection**:
+   - Implement A/B testing to compare different recommendation strategies
+   - Collect explicit feedback through user ratings and comments
+   - Track implicit feedback (e.g., recommendation acceptance rates)
+
+2. **System Performance Monitoring**:
+   - Response latency and processing time
+   - Token usage and associated costs
+   - System reliability and uptime
+   - Error rates and exception handling
+
+3. **Continuous Improvement Process**:
+   - Regular analysis of collected metrics
+   - Periodic retraining of models with new data
+   - Systematic implementation of improvements based on evaluation results
